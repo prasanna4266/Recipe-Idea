@@ -1,0 +1,258 @@
+/* --- 1. Foundation & Color Palette --- */
+:root {
+    --primary-color: #3B82F6; /* A modern, friendly blue */
+    --primary-hover-color: #2563EB;
+    --background-color: #F9FAFB; /* A very light grey, softer than white */
+    --card-bg-color: #FFFFFF;
+    --text-color: #1F2937; /* Dark charcoal, softer than black */
+    --subtle-text-color: #6B7280;
+    --border-color: #D1D5DB;
+    --tag-bg-color: #E5E7EB;
+}
+
+body {
+    margin: 0;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* --- 2. Main App Layout & Header --- */
+.App {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+}
+
+.App-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.App-header h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+/* --- 3. Search & Filters Section --- */
+.search-and-filters {
+    background: var(--card-bg-color);
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    margin-bottom: 3rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.filters {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+/* --- 4. Modern Form Elements --- */
+input[type="text"],
+select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: 'Inter', sans-serif;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-sizing: border-box; /* Important for consistent sizing */
+}
+
+input[type="text"]:focus,
+select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+.slider {
+    width: 100%;
+    cursor: pointer;
+}
+
+/* Tag Input & Display */
+.tag-form {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.tag-form input {
+    flex-grow: 1;
+}
+
+.tag-form button, .primary-search-button {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.tag-form button {
+    background-color: var(--tag-bg-color);
+    color: var(--text-color);
+}
+.tag-form button:hover {
+    background-color: #d1d5db;
+}
+
+.primary-search-button {
+    width: 100%;
+    margin-top: 1.5rem;
+    background-color: var(--primary-color);
+    color: white;
+}
+.primary-search-button:hover {
+    background-color: var(--primary-hover-color);
+}
+.primary-search-button:active {
+    transform: scale(0.98);
+}
+.primary-search-button:disabled {
+    background-color: #9CA3AF;
+    cursor: not-allowed;
+}
+
+
+.tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.tag {
+    display: flex;
+    align-items: center;
+    background-color: var(--tag-bg-color);
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-weight: 500;
+}
+
+.tag button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    color: var(--subtle-text-color);
+    margin-left: 0.5rem;
+    padding: 0;
+    line-height: 1;
+}
+.tag button:hover {
+    color: var(--text-color);
+}
+
+/* --- 5. Recipe Grid & Cards --- */
+.recipe-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.recipe-card {
+    background: var(--card-bg-color);
+    border-radius: 16px;
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.recipe-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+}
+
+.recipe-card img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    display: block;
+}
+
+.recipe-card h3 {
+    padding: 1.25rem;
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+/* --- 6. Recipe Details View --- */
+.recipe-details {
+    background: var(--card-bg-color);
+    padding: 2.5rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+}
+
+.recipe-details img {
+    width: 100%;
+    max-width: 600px;
+    border-radius: 12px;
+    display: block;
+    margin: 0 auto 1.5rem;
+}
+
+.recipe-details h2 {
+    text-align: center;
+    font-size: 2rem;
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+}
+
+.recipe-details .instructions {
+    white-space: pre-wrap; /* Keeps line breaks from the API */
+    line-height: 1.7;
+    color: var(--subtle-text-color);
+}
+
+.back-button {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 2rem;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.back-button:hover {
+    background-color: var(--tag-bg-color);
+}
+
+/* --- 7. Loading & Error States --- */
+.loading, .error {
+    text-align: center;
+    font-size: 1.2rem;
+    padding: 4rem 1rem;
+    color: var(--subtle-text-color);
+}
+
+.error {
+    color: #EF4444; /* A modern red for errors */
+}
