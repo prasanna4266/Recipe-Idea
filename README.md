@@ -9,13 +9,6 @@ Your personal assistant for delicious, home-cooked meals. Find recipes based on 
 
 ---
 
-### Screenshot
-
-![PantryChef Screenshot](https://i.imgur.com/7bQ6IeD.png)
-*(This is a placeholder image. Replace it with a screenshot of your finished application!)*
-
----
-
 ### 🌟 Features
 
 PantryChef is designed for the busy professional who wants to cook at home but needs a little help deciding what to make.
