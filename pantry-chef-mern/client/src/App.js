@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import './App.css';
 
-const API_URL = '/api';
+// CORRECT for Production
+const API_URL = `${process.env.REACT_APP_API_URL}/api`;
 
 function App() {
     // State for advanced search UI
