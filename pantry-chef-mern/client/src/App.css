@@ -1,53 +1,92 @@
 /* --- 1. Foundation & Color Palette --- */
 :root {
-    --primary-color: #3B82F6; /* A modern, friendly blue */
-    --primary-hover-color: #2563EB;
-    --background-color: #F9FAFB; /* A very light grey, softer than white */
-    --card-bg-color: #FFFFFF;
-    --text-color: #1F2937; /* Dark charcoal, softer than black */
-    --subtle-text-color: #6B7280;
-    --border-color: #D1D5DB;
-    --tag-bg-color: #E5E7EB;
+    --primary-color: #A36A00;
+    --primary-hover-color: #8C5A00;
+    --content-bg-color: rgba(255, 255, 255, 0.95);
+    --text-color: #262626;
+    --subtle-text-color: #525252;
+    --border-color: #E0E0E0;
+    --tag-bg-color: #F5F5F5;
+    --error-color: #D32F2F;
 }
 
 body {
     margin: 0;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    background-color: var(--background-color);
     color: var(--text-color);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    background-image: linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7)), 
+                      url('https://images.unsplash.com/photo-1495195129352-aeb325a55b65?q=80&w=2940&auto=format&fit=crop');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    min-height: 100vh;
 }
 
-/* --- 2. Main App Layout & Header --- */
+/* --- 2. Main App Layout & Header (UPDATED) --- */
 .App {
     max-width: 1200px;
-    margin: 0 auto;
+    margin: 0 auto; /* Centered layout */
     padding: 2rem 1.5rem;
 }
 
 .App-header {
     text-align: center;
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
+    color: var(--text-color); /* Make header text dark for readability */
 }
 
 .App-header h1 {
-    font-size: 2.5rem;
+    font-size: 3rem;
     font-weight: 700;
-    margin: 0;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Add subtle shadow to text */
 }
 
-/* --- 3. Search & Filters Section --- */
+.App-header p {
+    font-size: 1.25rem;
+    color: var(--subtle-text-color);
+    margin: 0;
+    font-weight: 500;
+}
+
+/* --- 3. Restored Compact Search Box (UPDATED) --- */
+main {
+    padding-bottom: 2rem;
+}
+
 .search-and-filters {
-    background: var(--card-bg-color);
+    max-width: 700px; /* Control the width of the search box */
+    margin: 0 auto 3rem auto; /* Center the search box */
+    background: var(--content-bg-color); /* Apply the semi-transparent background here */
     padding: 2rem;
     border-radius: 16px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-    margin-bottom: 3rem;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 
+.results-section {
+    margin-top: 3rem;
+}
+
+.results-title {
+    font-size: 2rem;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 2rem;
+    padding: 0.75rem;
+    background: var(--content-bg-color); /* Give titles a background for readability */
+    border-radius: 12px;
+    display: inline-block; /* Center the block itself */
+    left: 50%;
+    position: relative;
+    transform: translateX(-50%);
+}
+
+/* --- (The rest of the styles are mostly unchanged) --- */
 .form-group {
     margin-bottom: 1.5rem;
+    position: relative;
 }
 
 .form-group label {
@@ -56,14 +95,36 @@ body {
     margin-bottom: 0.5rem;
 }
 
-.filters {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.5rem;
-    margin-top: 1.5rem;
+.mandatory {
+    color: var(--error-color);
+    margin-left: 0.25rem;
 }
 
-/* --- 4. Modern Form Elements --- */
+.suggestions-list {
+    list-style: none;
+    padding: 0;
+    margin: 0.25rem 0 0 0;
+    position: absolute;
+    background: white;
+    width: calc(100% - 2rem);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+    z-index: 10;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.suggestions-list li {
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.suggestions-list li:hover {
+    background-color: var(--tag-bg-color);
+}
+
 input[type="text"],
 select {
     width: 100%;
@@ -73,14 +134,16 @@ select {
     font-size: 1rem;
     font-family: 'Inter', sans-serif;
     transition: border-color 0.2s, box-shadow 0.2s;
-    box-sizing: border-box; /* Important for consistent sizing */
+    box-sizing: border-box;
+    background-color: white;
+    color: var(--text-color);
 }
 
 input[type="text"]:focus,
 select:focus {
     outline: none;
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    box-shadow: 0 0 0 3px rgba(163, 106, 0, 0.2);
 }
 
 .slider {
@@ -88,7 +151,6 @@ select:focus {
     cursor: pointer;
 }
 
-/* Tag Input & Display */
 .tag-form {
     display: flex;
     gap: 0.5rem;
@@ -113,7 +175,7 @@ select:focus {
     color: var(--text-color);
 }
 .tag-form button:hover {
-    background-color: #d1d5db;
+    background-color: #E0E0E0;
 }
 
 .primary-search-button {
@@ -129,16 +191,16 @@ select:focus {
     transform: scale(0.98);
 }
 .primary-search-button:disabled {
-    background-color: #9CA3AF;
+    background-color: #A3A3A3;
     cursor: not-allowed;
 }
-
 
 .tags-container {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
     margin-top: 1rem;
+    min-height: 2rem;
 }
 
 .tag {
@@ -164,7 +226,6 @@ select:focus {
     color: var(--text-color);
 }
 
-/* --- 5. Recipe Grid & Cards --- */
 .recipe-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -172,7 +233,7 @@ select:focus {
 }
 
 .recipe-card {
-    background: var(--card-bg-color);
+    background: var(--content-bg-color);
     border-radius: 16px;
     overflow: hidden;
     cursor: pointer;
@@ -200,9 +261,8 @@ select:focus {
     text-align: center;
 }
 
-/* --- 6. Recipe Details View --- */
 .recipe-details {
-    background: var(--card-bg-color);
+    background: var(--content-bg-color);
     padding: 2.5rem;
     border-radius: 16px;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
@@ -224,9 +284,19 @@ select:focus {
 }
 
 .recipe-details .instructions {
-    white-space: pre-wrap; /* Keeps line breaks from the API */
+    white-space: pre-wrap;
     line-height: 1.7;
     color: var(--subtle-text-color);
+}
+
+.recipe-info {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+    color: var(--subtle-text-color);
+}
+.recipe-info p {
+    margin: 0.5rem 0;
 }
 
 .back-button {
@@ -245,7 +315,6 @@ select:focus {
     background-color: var(--tag-bg-color);
 }
 
-/* --- 7. Loading & Error States --- */
 .loading, .error {
     text-align: center;
     font-size: 1.2rem;
@@ -254,5 +323,31 @@ select:focus {
 }
 
 .error {
-    color: #EF4444; /* A modern red for errors */
+    color: var(--error-color);
 }
+
+.save-button {
+    float: right;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: background-color 0.2s;
+}
+
+.save-button:hover {
+    background-color: var(--primary-hover-color);
+}
+
+.results-section + .results-section {
+    margin-top: 3rem;
+    border-top: 1px solid var(--border-color);
+    padding-top: 3rem;
+}
+
+/* ... (Your modal styles remain the same) ... */
+.modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,0.6);display:flex;justify-content:center;align-items:center;z-index:1000;animation:fadeIn 0.3s ease-out}.modal-content{background:white;padding:2rem;border-radius:16px;box-shadow:0 10px 25px rgba(0,0,0,0.2);width:90%;max-width:600px;position:relative;animation:slideIn 0.4s ease-out}.modal-content h3{margin-top:0;font-size:1.75rem;color:var(--text-color)}.modal-content p{font-size:1.1rem;line-height:1.6;color:var(--subtle-text-color)}.modal-close-button{position:absolute;top:1rem;right:1rem;background:none;border:none;font-size:2rem;line-height:1;color:var(--subtle-text-color);cursor:pointer;transition:color 0.2s}.modal-close-button:hover{color:var(--text-color)}@keyframes fadeIn{from{opacity:0}to{opacity:1}}@keyframes slideIn{from{transform:translateY(-30px);opacity:0}to{transform:translateY(0);opacity:1}}
