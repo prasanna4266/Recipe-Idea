@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import './App.css';
+import ingredientsData from './data/ingredients'; // <-- IMPORTING YOUR LOCAL DATA
 
 const API_URL = `${process.env.REACT_APP_API_URL}/api`;
-const MEALDB_API_LIST_INGREDIENTS = 'https://www.themealdb.com/api/json/v1/1/list.php?i=list';
 const MEALDB_API_LOOKUP = 'https://www.themealdb.com/api/json/v1/1/lookup.php?i=';
 
 function App() {
@@ -31,15 +31,11 @@ function App() {
         localStorage.setItem('pantryChefSavedMeals', JSON.stringify(savedMeals));
     }, [savedMeals]);
 
+    // --- THIS IS THE UPDATED useEffect HOOK ---
+    // It now loads from your local file instead of an API call
     useEffect(() => {
-        const fetchAllIngredients = async () => {
-            try {
-                const response = await axios.get(MEALDB_API_LIST_INGREDIENTS);
-                const ingredientList = response.data.meals.map(item => item.strIngredient);
-                setAllIngredients(ingredientList);
-            } catch (err) { console.error("Could not fetch ingredient list", err); }
-        };
-        fetchAllIngredients();
+        const ingredientList = ingredientsData.meals.map(item => item.strIngredient);
+        setAllIngredients(ingredientList);
     }, []);
 
     useEffect(() => {
