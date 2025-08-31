@@ -10,7 +10,7 @@ function App() {
     const [currentIngredient, setCurrentIngredient] = useState('');
     const [cuisine, setCuisine] = useState('');
     const [maxTime, setMaxTime] = useState(60);
-    const [exclusions, setExclusions] = useState([]);
+    //const [exclusions, setExclusions] = useState([]);
     // Note: A full implementation for exclusions would require another input field.
 
     // Core application state
