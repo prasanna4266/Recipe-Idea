@@ -48,7 +48,7 @@ const handleAdvancedSearch = async () => {
     setMeals([]); // Immediately clear old meals for a better user experience
     setSelectedRecipe(null);
 
-    const searchCriteria = { ingredients, cuisine, maxTime, exclusions };
+    const searchCriteria = { ingredients, cuisine, maxTime };
 
     try {
         // 3. Make the API call
