@@ -7,18 +7,7 @@ const MEALDB_API_LIST_INGREDIENTS = 'https://www.themealdb.com/api/json/v1/1/lis
 const MEALDB_API_LOOKUP = 'https://www.themealdb.com/api/json/v1/1/lookup.php?i=';
 
 function App() {
-    // --- NEW FUNCTION FOR DYNAMIC GREETING ---
-    const getGreeting = () => {
-        const hour = new Date().getHours();
-        if (hour < 12) return "Good morning";
-        if (hour < 17) return "Good afternoon";
-        return "Good evening";
-    };
-
-    // State for the modal
-    const [ingredientDetails, setIngredientDetails] = useState(null);
-
-    // ... (rest of the state variables remain the same)
+    // This is the clean state without the modal logic
     const [savedMeals, setSavedMeals] = useState([]);
     const [ingredients, setIngredients] = useState([]);
     const [currentIngredient, setCurrentIngredient] = useState('');
@@ -32,27 +21,27 @@ function App() {
     const [error, setError] = useState('');
     const suggestionsRef = useRef(null);
 
-    // ... (All useEffect hooks and other functions remain the same)
+    // useEffect hooks for localStorage and fetching ingredient names
     useEffect(() => {
         const saved = JSON.parse(localStorage.getItem('pantryChefSavedMeals')) || [];
         setSavedMeals(saved);
     }, []);
+
     useEffect(() => {
         localStorage.setItem('pantryChefSavedMeals', JSON.stringify(savedMeals));
     }, [savedMeals]);
+
     useEffect(() => {
         const fetchAllIngredients = async () => {
             try {
                 const response = await axios.get(MEALDB_API_LIST_INGREDIENTS);
-                const ingredientList = response.data.meals.map(item => ({
-                    strIngredient: item.strIngredient,
-                    strDescription: `A description for ${item.strIngredient} would appear here. This feature demonstrates how to display detailed ingredient information if the API provides it.`
-                }));
+                const ingredientList = response.data.meals.map(item => item.strIngredient);
                 setAllIngredients(ingredientList);
             } catch (err) { console.error("Could not fetch ingredient list", err); }
         };
         fetchAllIngredients();
     }, []);
+
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (suggestionsRef.current && !suggestionsRef.current.contains(event.target)) {
@@ -63,23 +52,27 @@ function App() {
         return () => { document.removeEventListener("mousedown", handleClickOutside); };
     }, [suggestionsRef]);
 
-    const handleIngredientClick = (ingredientName) => {
-        const details = allIngredients.find(ing => ing.strIngredient.toLowerCase() === ingredientName.toLowerCase());
-        setIngredientDetails(details || { strIngredient: ingredientName, strDescription: "No detailed description available." });
-    };
-    const closeIngredientModal = () => { setIngredientDetails(null); };
-
+    // This is the simple, non-clickable version of renderIngredients
     const renderIngredients = (recipe) => {
         const ingredientsList = [];
         for (let i = 1; i <= 20; i++) {
             const ingredient = recipe[`strIngredient${i}`];
             const measure = recipe[`strMeasure${i}`];
             if (ingredient) {
-                ingredientsList.push(<li key={i}>{measure} <span className="ingredient-link" onClick={() => handleIngredientClick(ingredient)}>{ingredient}</span></li>);
+                ingredientsList.push(<li key={i}>{measure} {ingredient}</li>);
             } else { break; }
         }
         return ingredientsList;
     };
+    
+    // Other functions remain the same
+    const getGreeting = () => {
+        const hour = new Date().getHours();
+        if (hour < 12) return "Good morning";
+        if (hour < 17) return "Good afternoon";
+        return "Good evening";
+    };
+
     const toggleSaveMeal = (mealToToggle) => {
         const isAlreadySaved = savedMeals.some(meal => meal.idMeal === mealToToggle.idMeal);
         if (isAlreadySaved) {
@@ -89,10 +82,15 @@ function App() {
             setSavedMeals([...savedMeals, simplifiedMeal]);
         }
     };
+
     const handleSelectRecipe = async (mealId) => {
         setIsLoading(true);
         let recipe = meals.find(meal => meal.idMeal === mealId);
         if (!recipe) {
+            // Check saved meals as well before fetching
+            recipe = savedMeals.find(meal => meal.idMeal === mealId);
+        }
+        if (!recipe || !recipe.strInstructions) { // If it's a simplified saved meal, we need to fetch full details
             try {
                 const response = await axios.get(`${MEALDB_API_LOOKUP}${mealId}`);
                 recipe = response.data.meals[0];
@@ -106,16 +104,18 @@ function App() {
         setIsLoading(false);
         window.scrollTo(0, 0);
     };
+
     const handleIngredientChange = (e) => {
         const value = e.target.value;
         setCurrentIngredient(value);
         if (value.length > 1) {
-            const filteredSuggestions = allIngredients.map(i => i.strIngredient).filter(ing => ing.toLowerCase().includes(value.toLowerCase())).slice(0, 10);
+            const filteredSuggestions = allIngredients.filter(ing => ing.toLowerCase().includes(value.toLowerCase())).slice(0, 10);
             setSuggestions(filteredSuggestions);
         } else {
             setSuggestions([]);
         }
     };
+
     const addIngredient = (ing) => {
         if (ing && !ingredients.includes(ing.trim())) {
             setIngredients([...ingredients, ing.trim()]);
@@ -123,13 +123,16 @@ function App() {
         setCurrentIngredient('');
         setSuggestions([]);
     };
+
     const handleFormSubmit = (e) => {
         e.preventDefault();
         addIngredient(currentIngredient);
     };
+
     const removeIngredient = (ingToRemove) => {
         setIngredients(ingredients.filter(ing => ing !== ingToRemove));
     };
+
     const handleAdvancedSearch = async () => {
         if (ingredients.length === 0) {
             setError('Please add at least one main ingredient.');
@@ -152,6 +155,7 @@ function App() {
             setIsLoading(false);
         }
     };
+
     const handleBackToList = () => {
         setSelectedRecipe(null);
         setError('');
@@ -160,13 +164,11 @@ function App() {
     return (
         <div className="App">
             <header className="App-header">
-                {/* --- UPDATED GREETING AND TEXT --- */}
                 <h1>{getGreeting()}, Taylor! 🍳</h1>
                 <p>What would you like to have now?</p>
             </header>
 
             <main>
-                {/* ... (The rest of the JSX remains exactly the same) ... */}
                 {!selectedRecipe ? (
                     <>
                         <div className="search-and-filters">
@@ -182,7 +184,7 @@ function App() {
                                     </ul>
                                 )}
                                 <div className="tags-container">
-                                    {ingredients.map(ing => (<span key="ing" className="tag">{ing} <button onClick={() => removeIngredient(ing)}>x</button></span>))}
+                                    {ingredients.map(ing => (<span key={ing} className="tag">{ing} <button onClick={() => removeIngredient(ing)}>x</button></span>))}
                                 </div>
                             </div>
                             <div className="filters">
@@ -245,16 +247,6 @@ function App() {
                     </div>
                 )}
             </main>
-
-            {ingredientDetails && (
-                <div className="modal-overlay" onClick={closeIngredientModal}>
-                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                        <button className="modal-close-button" onClick={closeIngredientModal}>&times;</button>
-                        <h3>{ingredientDetails.strIngredient}</h3>
-                        <p>{ingredientDetails.strDescription}</p>
-                    </div>
-                </div>
-            )}
         </div>
     );
 }
